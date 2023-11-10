@@ -1,0 +1,7 @@
+USE Std.String
+
+FUNCTION GetHelloWorld() RETURNS String
+    RETURN "Hello, world!"
+ENDFUNCTION
+
+OUTPUT CALL GetHelloWorld()

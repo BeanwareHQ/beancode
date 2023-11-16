@@ -14,12 +14,10 @@ pub struct Cli;
 
 impl Cli {
     pub fn run(args: Arguments) {
-        println!("The beancode transpiler.\n");
+        println!("{}\n", "The beancode transpiler.".bold());
         let file_contents = std::fs::read_to_string(args.path).unwrap();
 
-        let output = backend::lexer::Lexer::new(file_contents)
-            .tokenize()
-            .unwrap();
+        let output = backend::lexer::Lexer::new(file_contents).lex().unwrap();
 
         print!("[");
         for (idx, tok) in output.iter().enumerate() {

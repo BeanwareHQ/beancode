@@ -67,9 +67,20 @@ pub enum Keyword {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+pub enum Separator {
+    LParen,
+    RParen,
+    LBracket,
+    RBracket,
+    LCurly,
+    RCurly,
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub enum TokenVariant {
     Operator(Operator),
     Keyword(Keyword),
+    Separator(Separator),
     Ident(String),
     Literal(BObject),
     Invalid,

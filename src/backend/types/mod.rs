@@ -152,3 +152,9 @@ impl BFloat {
         Self { inner: num }
     }
 }
+
+impl BString {
+    pub fn new(val: String) -> Self {
+        Self { inner: val }
+    }
+}

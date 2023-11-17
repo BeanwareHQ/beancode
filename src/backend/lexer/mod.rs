@@ -1,12 +1,7 @@
 mod types;
 
-use std::num::{IntErrorKind, ParseIntError};
-
 use crate::backend::types::*;
 pub use types::*;
-
-type Byte = u8;
-type LexerResult<T> = Result<T, Box<dyn std::error::Error>>; // FIXME: errors
 
 macro_rules! token {
     ($pos:expr, $variant:ident) => {
@@ -23,7 +18,7 @@ macro_rules! token {
 }
 
 pub struct Lexer {
-    data: Vec<Byte>,
+    data: Vec<u8>,
     data_len: usize,
     mainptr: usize,
     peekptr: usize,
@@ -41,11 +36,11 @@ impl Lexer {
         };
     }
 
-    fn at(&self) -> Byte {
+    fn at(&self) -> u8 {
         self.data[self.mainptr]
     }
 
-    fn peek(&self) -> Byte {
+    fn peek(&self) -> u8 {
         self.data[self.peekptr]
     }
 
@@ -101,6 +96,8 @@ impl Lexer {
 
     fn next_singlechar_token(&self, ch: u8) -> Option<Token> {
         use Operator::*;
+        use Separator::*;
+
         match ch {
             b'+' => Some(token!(self.mainptr, Operator, Add)),
             b'-' => Some(token!(self.mainptr, Operator, Sub)),
@@ -110,6 +107,12 @@ impl Lexer {
             b'=' => Some(token!(self.mainptr, Operator, Eq)),
             b'>' => Some(token!(self.mainptr, Operator, Gt)),
             b'<' => Some(token!(self.mainptr, Operator, Gt)),
+            b'(' => Some(token!(self.mainptr, Separator, LParen)),
+            b')' => Some(token!(self.mainptr, Separator, RParen)),
+            b'[' => Some(token!(self.mainptr, Separator, LBracket)),
+            b']' => Some(token!(self.mainptr, Separator, RBracket)),
+            b'{' => Some(token!(self.mainptr, Separator, LCurly)),
+            b'}' => Some(token!(self.mainptr, Separator, RCurly)),
             _ => None,
         }
     }
@@ -186,6 +189,23 @@ impl Lexer {
         };
 
         // String literals
+        if bytes[0] == b'"' {
+            let mut buf = String::new();
+
+            for chr in &bytes[1..] {
+                if chr == &b'"' {
+                    break;
+                }
+
+                buf.push(char::from_u32(*chr as u32).unwrap());
+            }
+
+            return Some(token!(
+                self.mainptr,
+                Literal,
+                BObject::String(BString::new(buf))
+            ));
+        }
 
         None
     }

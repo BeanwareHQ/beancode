@@ -25,8 +25,10 @@ TestIdent AnotherIdent Foo Bar Baz
 9_223_372_036_854_775_808 ;; Uint128
 4.256 ;; Float
 
+;; separators
+()[]{}
+
 ;; somewhat complex structure
 IF MyIdent > OtherIdent THEN
-;;    OUTPUT "Literal"
+    OUTPUT "Hello!"
 ENDIF
-

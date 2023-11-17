@@ -10,17 +10,23 @@
 + - * / ** % //
 
 ;; keywords
-DECLARE IF ELSE ENDIF THEN CASE OF FOR NEXT TO REPEAT UNTIL WHILE ENDWHILE FUNCTION ENDFUNCTION RETURN OUTPUT INPUT CALL TRUE FALSE
+DECLARE IF ELSE ENDIF THEN CASE OF FOR NEXT TO REPEAT UNTIL
+WHILE ENDWHILE FUNCTION ENDFUNCTION RETURN OUTPUT INPUT CALL
+TRUE FALSE
 
 ;; identifiers
 TestIdent AnotherIdent Foo Bar Baz
 
 ;; literals
-42 ;; Integer
+42 ;; Uint8
+256 ;; Uint16
+65_536 ;; Uint32
+2_147_483_648 ;; Uint64
+9_223_372_036_854_775_808 ;; Uint128
 4.256 ;; Float
-4_2 ;; underscores
 
 ;; somewhat complex structure
 IF MyIdent > OtherIdent THEN
 ;;    OUTPUT "Literal"
 ENDIF
+

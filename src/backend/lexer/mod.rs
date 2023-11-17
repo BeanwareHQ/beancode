@@ -1,5 +1,7 @@
 mod types;
 
+use std::num::{IntErrorKind, ParseIntError};
+
 use crate::backend::types::*;
 pub use types::*;
 
@@ -175,18 +177,11 @@ impl Lexer {
                 let result = BFloat::new(num);
                 return Some(token!(self.mainptr, Literal, BObject::Float(result)));
             } else {
-                match num_buf.parse::<i8>() {
-                    Ok(num) => {
-                        return Some(token!(
-                            self.mainptr,
-                            Literal,
-                            BObject::Integer(BInteger::new(BIntegerVariant::Int8(num)))
-                        ))
-                    }
-                    Err(e) => {
-                        // TODO: implement
-                    }
-                };
+                return Some(token!(
+                    self.mainptr,
+                    Literal,
+                    BObject::Integer(BInteger::parse_from_string(&num_buf))
+                ));
             }
         };
 
@@ -261,7 +256,7 @@ impl Lexer {
         Some(token!(self.mainptr, Ident, s))
     }
 
-    pub fn lex(&mut self) -> LexerResult<Vec<Token>> {
+    pub fn tokenize(&mut self) -> Vec<Token> {
         let mut res = Vec::new();
         while self.mainptr < self.data_len {
             self.inc_by = 1;
@@ -273,6 +268,6 @@ impl Lexer {
             self.mainptr += self.inc_by;
         }
         res.push(token!(self.data_len - 1, Eof));
-        Ok(res)
+        res
     }
 }

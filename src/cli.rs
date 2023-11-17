@@ -17,7 +17,7 @@ impl Cli {
         println!("{}\n", "The beancode transpiler.".bold());
         let file_contents = std::fs::read_to_string(args.path).unwrap();
 
-        let output = backend::lexer::Lexer::new(file_contents).lex().unwrap();
+        let output = backend::lexer::Lexer::new(file_contents).tokenize();
 
         print!("[");
         for (idx, tok) in output.iter().enumerate() {

@@ -1,4 +1,6 @@
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+use crate::backend::types::BObject;
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Operator {
     // Math
     Add,
@@ -24,7 +26,7 @@ pub enum Operator {
     //Typeis, (for typing, will add later)
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Keyword {
     // Variables
     Declare,
@@ -34,6 +36,8 @@ pub enum Keyword {
     Else,
     Endif,
     Then,
+    True,
+    False,
 
     // Case of
     Case,
@@ -62,15 +66,18 @@ pub enum Keyword {
     //Use,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum TokenVariant {
     Operator(Operator),
     Keyword(Keyword),
+    Ident(String),
+    Literal(BObject),
+    Invalid,
     Unrecognized,
     Eof,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct Token {
     pub variant: TokenVariant,
     pub pos: usize,

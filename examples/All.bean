@@ -1,0 +1,26 @@
+;; operators
+=  ;; eq
+>= ;; leq
+<= ;; geq
+<> ;; neq
+<- ;; lassign
+-> ;; rassign
+<< ;; shl
+>> ;; shr
++ - * / ** % //
+
+;; keywords
+DECLARE IF ELSE ENDIF THEN CASE OF FOR NEXT TO REPEAT UNTIL WHILE ENDWHILE FUNCTION ENDFUNCTION RETURN OUTPUT INPUT CALL TRUE FALSE
+
+;; identifiers
+TestIdent AnotherIdent Foo Bar Baz
+
+;; literals
+42 ;; Integer
+4.256 ;; Float
+4_2 ;; underscores
+
+;; somewhat complex structure
+IF MyIdent > OtherIdent THEN
+;;    OUTPUT "Literal"
+ENDIF

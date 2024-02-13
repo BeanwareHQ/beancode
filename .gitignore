@@ -1,0 +1,5 @@
+.vscode
+build
+.cache
+**/*.o
+bean

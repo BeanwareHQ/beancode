@@ -1,0 +1,54 @@
+;; operators
+=  ;; eq
+>= ;; leq
+<= ;; geq
+<> ;; neq
+<- ;; lassign
+-> ;; rassign
+<< ;; shl
+>> ;; shr
++ - * / ** % //
+
+<-+ ;; laddasign
+<-- ;; lsubassign
+<-* ;; lmulassign
+<-/ ;; ldivassign
+<-** ;; lpowassign
+<-// ;; lfloordivassign
+
++-> ;; raddassign
+--> ;; rsubassign
+*-> ;; rmulassign
+/-> ;; rdivassign
+**-> ;; rpowassign
+//-> ;; rfloordivassign
+
+;; keywords
+DECLARE IF ELSE ENDIF THEN CASE OF FOR NEXT TO REPEAT UNTIL
+WHILE ENDWHILE FUNCTION ENDFUNCTION RETURN OUTPUT INPUT TRUE
+FALSE
+
+declare if else endif then case of for next to repeat until
+while endwhile function endfunction return output input true
+false
+
+;; literals
+42 ;; Uint8
+256 ;; Uint16
+65_536 ;; Uint32
+2_147_483_648 ;; Uint64
+9_223_372_036_854_775_808 ;; Uint128
+4.256 ;; Float
+
+"this is a string literal" ;; String
+
+;; identifiers
+TestIdent AnotherIdent Foo Bar Baz
+
+;; separators
+()[]{}
+
+;; somewhat complex structure
+if MyIdent > OtherIdent then
+    output "hello!"
+endif

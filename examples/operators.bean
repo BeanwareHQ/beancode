@@ -1,0 +1,29 @@
+=  ;; eq
+>= ;; leq
+<= ;; geq
+<> ;; neq
+<- ;; lassign
+-> ;; rassign
+<< ;; shl
+>> ;; shr
++  ;; add
+-  ;; sub
+*  ;; mul
+/  ;; div
+** ;; power
+%  ;; mod
+// ;; floordiv
+
+<-+ ;; laddasign
+<-- ;; lsubassign
+<-* ;; lmulassign
+<-/ ;; ldivassign
+<-** ;; lpowassign
+<-// ;; lfloordivassign
+
++-> ;; raddassign
+--> ;; rsubassign
+*-> ;; rmulassign
+/-> ;; rdivassign
+**-> ;; rpowassign
+//-> ;; rfloordivassign

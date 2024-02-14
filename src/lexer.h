@@ -32,4 +32,4 @@ typedef struct {
 
 Lexer lexer_new(const char* file, size_t file_len);
 Token lexer_next(Lexer* lx);
-void lexer_run(Lexer* lx);
+size_t lexer_run(Lexer* lx, Token* res);

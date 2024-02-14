@@ -1,0 +1,5 @@
+#include "../submodules/beanutils/beanutils/array.h"
+#include "../submodules/beanutils/beanutils/common.h"
+#include "../submodules/beanutils/beanutils/io.h"
+#include "../submodules/beanutils/beanutils/logger.h"
+#include "../submodules/beanutils/beanutils/string.h"

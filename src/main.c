@@ -32,7 +32,7 @@ int main(int argc, char* argv[argc]) {
         if (buf_len + 2 > 2048) {
             buf_size *= 3;
             buf = realloc(buf, buf_size);
-        
+
             if (buf == NULL) {
                 perror("realloc: ");
                 exit(EXIT_FAILURE);
@@ -47,5 +47,6 @@ int main(int argc, char* argv[argc]) {
     buf[buf_len] = '\0';
 
     Lexer lexer = lexer_new(buf, strlen(buf));
-    lexer_run(&lexer);
+    Token* tokens;
+    size_t tokens_len = lexer_run(&lexer, tokens);
 }

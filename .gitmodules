@@ -1,0 +1,3 @@
+[submodule "submodules/beanutils"]
+	path = submodules/beanutils
+	url = https://github.com/beanwarehq/beanutils

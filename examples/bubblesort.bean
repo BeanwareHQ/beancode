@@ -1,0 +1,20 @@
+function bubblesort(data)
+    for i <- 1 to data.length - 1
+        swapped <- false
+        for j <- 1 to data.length - i - 1
+            if data[j] > data[j+1] then
+                temp <- data[j+1]
+                data[j+1] <- data[j]
+                data[j] <- temp
+            endif
+        next j
+
+        if swapped = false then
+            break
+        endif
+    next i
+endfunction
+
+data <- [3, 1, 9, 5, 7]
+bubblesort(data)
+output data

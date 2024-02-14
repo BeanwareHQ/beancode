@@ -27,7 +27,7 @@ bool is_operator_start(char ch) {
 
 bool is_separator(char ch) {
     return (ch == '{' || ch == '[' || ch == '(' || ch == ')' || ch == ']' ||
-            ch == '}');
+            ch == '}' || ch == '.' || ch == ',');
 }
 
 bool is_keyword(const char* str) {
@@ -35,7 +35,7 @@ bool is_keyword(const char* str) {
      *
      * DECLARE IF ELSE ENDIF THEN CASE OF FOR NEXT TO REPEAT UNTIL
      * WHILE ENDWHILE FUNCTION ENDFUNCTION RETURN OUTPUT INPUT TRUE
-     * FALSE
+     * FALSE BREAK CONTINUE
      */
 
     char s[128];
@@ -52,8 +52,9 @@ bool is_keyword(const char* str) {
             !strcmp(s, "TO") || !strcmp(s, "REPEAT") || !strcmp(s, "UNTIL") ||
             !strcmp(s, "WHILE") || !strcmp(s, "ENDWHILE") ||
             !strcmp(s, "FUNCTION") || !strcmp(s, "ENDFUNCTION") ||
-            !strcmp(s, "RETURN") || !strcmp(s, "OUTPUT") || !strcmp(s, "INPUT") ||
-            !strcmp(s, "TRUE") || !strcmp(s, "FALSE"));
+            !strcmp(s, "RETURN") || !strcmp(s, "OUTPUT") ||
+            !strcmp(s, "INPUT") || !strcmp(s, "TRUE") || !strcmp(s, "FALSE") ||
+            !strcmp(s, "CONTINUE") || !strcmp(s, "BREAK"));
 }
 
 bool is_numeral(const char* s) {
@@ -67,16 +68,24 @@ bool is_numeral(const char* s) {
 void lexer_trim_comment(Lexer* lx);
 
 void lexer_trim_left(Lexer* lx) {
-    while (is_whitespace(lx->content[lx->pos]))
+    char currch;
+    while (is_whitespace((currch = lx->content[lx->pos]))) {
         lx->pos++;
-    
+
+        if (currch == '\n') {
+            lx->nlines++;
+            lx->bol = lx->pos;
+        }
+    }
+
     lexer_trim_comment(lx);
 }
 
 void lexer_trim_comment(Lexer* lx) {
     char currch = lx->content[lx->pos];
     if (currch == ';' && lx->content[lx->pos + 1] == ';') {
-        while ((currch = lx->content[lx->pos]) != '\n' && lx->pos < lx->content_len)
+        while ((currch = lx->content[lx->pos]) != '\n' &&
+               lx->pos < lx->content_len)
             lx->pos++;
         lx->nlines++;
         lx->bol = lx->pos;
@@ -166,7 +175,7 @@ size_t lexer_next_string_literal(Lexer* lx, char** txt) {
     lx->pos++; // skip past the end quote mark
     len++; // end quote mark exists and the loop didn't read it into the buffer
 
-    buf[len-1] = '"';
+    buf[len - 1] = '"';
     buf[len] = '\0';
 
     *txt = buf;
@@ -177,7 +186,7 @@ size_t lexer_next_string_literal(Lexer* lx, char** txt) {
 Token lexer_next(Lexer* lx) {
     lexer_trim_left(lx);
 
-    char* text_buf = calloc(256,1);
+    char* text_buf = calloc(256, 1);
     size_t text_len = 0;
     Token tok = {0};
 
@@ -203,6 +212,8 @@ Token lexer_next(Lexer* lx) {
         size_t nchars = lexer_next_operator(lx, &tok, &res);
         strncpy(text_buf, res, nchars);
         free(res);
+
+        tok.kind = TOKEN_OPERATOR;
 
         lx->pos += nchars;
 
@@ -235,11 +246,13 @@ Token lexer_next(Lexer* lx) {
     }
 
     // words
-    while (!is_whitespace((currch = lx->content[lx->pos])) && lx->pos < lx->content_len) {
+    while (!is_separator((currch = lx->content[lx->pos])) &&
+           !is_operator_start(currch) && !is_whitespace(currch) &&
+           lx->pos < lx->content_len) {
         text_buf[text_len++] = currch;
         lx->pos++;
     }
-    
+
     text_buf[text_len] = '\0';
 
     if (is_numeral(text_buf)) {
@@ -251,7 +264,6 @@ Token lexer_next(Lexer* lx) {
         tok.kind = TOKEN_KEYWORD;
         goto end;
     }
- 
 
     goto end;
 
@@ -264,23 +276,23 @@ end:
     return tok;
 }
 
-void lexer_run(Lexer* lx) {
-    Token* toks = malloc(sizeof(Token)*256);
+size_t lexer_run(Lexer* lx, Token* res) {
+    Token* toks = malloc(sizeof(Token) * 256);
     size_t toks_cap = 255;
     size_t toks_len = 0;
-    
+
     if (toks == NULL) {
         perror("malloc");
-        exit(EXIT_FAILURE);                
+        exit(EXIT_FAILURE);
     }
 
     do {
         if (toks_len + 1 > toks_cap) {
-            toks = realloc(toks, sizeof(Token)*toks_cap*3);
+            toks = realloc(toks, sizeof(Token) * toks_cap * 3);
 
             if (toks == NULL) {
                 perror("realloc");
-                exit(EXIT_FAILURE);                
+                exit(EXIT_FAILURE);
             }
         }
 
@@ -318,4 +330,7 @@ void lexer_run(Lexer* lx) {
         printf("Token(%s): `%s` @ row %zu, col %zu\n", tok_kind_txt, t.text,
                t.row, t.col);
     }
+
+    res = toks;
+    return toks_len;
 }
